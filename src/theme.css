@@ -1,0 +1,64 @@
+:root {
+  --backdrop: #2F4A3E;
+  --accent: #2E3B6E;
+  --header-tint: #B7CCC5;
+  --page-bg: #DCE8E3;
+  --surface: #FAF3E8;
+  --on-accent: #FFFFFF;
+  --text-primary: #1A1A1A;
+  --text-secondary: #5F5E5A;
+  --wear-fine: #639922;
+  --wear-due-soon: #BA7517;
+  --wear-overdue: #A32D2D;
+  --track-bg: #E4DEE1;
+  --border: #DAD5D8;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--backdrop);
+  color: var(--text-primary);
+}
+
+button {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  border: none;
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 0.5px solid var(--accent);
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 0.5px solid var(--border);
+  background: white;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 6px;
+}
