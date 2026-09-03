@@ -1,6 +1,6 @@
 import type { Bike, Component, RideEntry } from '../types'
 import { COMPONENT_LABELS } from '../types'
-import { BikeIcon, WearBar, WearDot } from './Shared'
+import { BikeIcon, Chevron, WearBar, WearDot } from './Shared'
 
 interface Props {
   bike: Bike
@@ -9,6 +9,7 @@ interface Props {
   onLogRide: () => void
   onAddMaintenance: () => void
   onSelectComponent: (componentId: string) => void
+  onSelectRide: (rideId: string) => void
   onBack: () => void
 }
 
@@ -19,6 +20,7 @@ export function BikeDetail({
   onLogRide,
   onAddMaintenance,
   onSelectComponent,
+  onSelectRide,
   onBack,
 }: Props) {
   const activeComponents = components.filter((c) => c.bikeId === bike.id && c.status === 'active')
@@ -105,10 +107,32 @@ export function BikeDetail({
           {recentRides.length === 0 && (
             <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>No rides logged yet.</p>
           )}
-          {recentRides.map((ride) => (
-            <div key={ride.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '5px 0', color: 'var(--text-secondary)' }}>
-              <span>{formatShortDate(ride.date)}</span>
-              <span>{ride.distanceKm} km</span>
+          {recentRides.map((ride, i) => (
+            <div
+              key={ride.id}
+              onClick={() => onSelectRide(ride.id)}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 10,
+                padding: '9px 0',
+                borderTop: i === 0 ? undefined : '0.5px solid var(--border)',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
+                <p style={{ fontSize: 13, margin: 0 }}>{formatShortDate(ride.date)}</p>
+                {ride.notes && (
+                  <p style={{ fontSize: 12, margin: '1px 0 0', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {ride.notes}
+                  </p>
+                )}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{ride.distanceKm} km</span>
+                <Chevron size={15} />
+              </div>
             </div>
           ))}
         </div>

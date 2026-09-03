@@ -30,6 +30,14 @@ const statusLabel: Record<string, string> = {
   overdue: 'Overdue',
 }
 
+export function Chevron({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0, opacity: 0.5 }}>
+      <path d="M9 6l6 6-6 6" stroke="var(--text-secondary)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export function WearBar({ component }: { component: Component }) {
   const status = getWearStatus(component)
   const ratio = getWearRatio(component)

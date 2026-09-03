@@ -4,6 +4,7 @@ import { useAppState } from './useAppState'
 import { BikeList } from './components/BikeList'
 import { BikeDetail } from './components/BikeDetail'
 import { ComponentDetail } from './components/ComponentDetail'
+import { RideDetail } from './components/RideDetail'
 import { LogRideModal } from './components/LogRideModal'
 import { AddMaintenanceModal } from './components/AddMaintenanceModal'
 import { AddEditBikeModal } from './components/AddEditBikeModal'
@@ -12,6 +13,8 @@ type View =
   | { name: 'list' }
   | { name: 'bike'; bikeId: string }
   | { name: 'component'; componentId: string; bikeId: string }
+  | { name: 'rides'; bikeId: string }
+  | { name: 'ride'; rideId: string; bikeId: string; from: 'bike' | 'rides' }
 
 export default function App() {
   const state = useAppState()
@@ -23,6 +26,8 @@ export default function App() {
   const currentBike = view.name !== 'list' ? state.bikes.find((b) => b.id === view.bikeId) : undefined
   const currentComponent =
     view.name === 'component' ? state.components.find((c) => c.id === view.componentId) : undefined
+  const currentRide =
+    view.name === 'ride' ? state.rides.find((r) => r.id === view.rideId) : undefined
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', padding: '32px 16px' }}>
@@ -53,7 +58,26 @@ export default function App() {
           onLogRide={() => setShowLogRide(true)}
           onAddMaintenance={() => setShowAddMaintenance(true)}
           onSelectComponent={(componentId) => setView({ name: 'component', componentId, bikeId: currentBike.id })}
+          onSelectRide={(rideId) => setView({ name: 'ride', rideId, bikeId: currentBike.id, from: 'bike' })}
           onBack={() => setView({ name: 'list' })}
+        />
+      )}
+
+      {view.name === 'ride' && currentRide && currentBike && (
+        <RideDetail
+          ride={currentRide}
+          onSave={(patch) => state.updateRide(currentRide.id, patch)}
+          onDelete={() => {
+            state.removeRide(currentRide.id)
+            setView({ name: 'bike', bikeId: currentBike.id })
+          }}
+          onBack={() =>
+            setView(
+              view.from === 'rides'
+                ? { name: 'rides', bikeId: currentBike.id }
+                : { name: 'bike', bikeId: currentBike.id }
+            )
+          }
         />
       )}
 
