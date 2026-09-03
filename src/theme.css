@@ -10,6 +10,7 @@
   --wear-fine: #639922;
   --wear-due-soon: #BA7517;
   --wear-overdue: #A32D2D;
+  --required: #8A1F2B;
   --track-bg: #E4DEE1;
   --border: #DAD5D8;
   --radius: 12px;
@@ -31,6 +32,11 @@ button {
   border-radius: 8px;
   padding: 10px 14px;
   cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 button.primary {

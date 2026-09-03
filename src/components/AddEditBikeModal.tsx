@@ -26,7 +26,8 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
   const photoUrl = useBlobUrl(photoBlob)
   const purchaseReceiptUrl = useBlobUrl(receiptBlob)
 
-  const canSave = make.trim().length > 0 && model.trim().length > 0
+  const canSave =
+    make.trim().length > 0 && model.trim().length > 0 && purchaseDate.length > 0
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -76,22 +77,46 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
         </label>
         <input id="photo-input" type="file" accept="image/*" onChange={handlePhotoChange} style={{ display: 'none' }} />
 
-        <label>Make</label>
-        <input placeholder="Canyon" value={make} onChange={(e) => setMake(e.target.value)} style={{ marginBottom: 14 }} />
+        <label>
+          Make <span style={{ color: 'var(--required)' }}>*</span>
+        </label>
+        <input
+          placeholder="Canyon"
+          required
+          value={make}
+          onChange={(e) => setMake(e.target.value)}
+          style={{ marginBottom: 14 }}
+        />
 
-        <label>Model</label>
-        <input placeholder="Grail" value={model} onChange={(e) => setModel(e.target.value)} style={{ marginBottom: 14 }} />
+        <label>
+          Model/Bike Type <span style={{ color: 'var(--required)' }}>*</span>
+        </label>
+        <input
+          placeholder="Grail"
+          required
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+          style={{ marginBottom: 14 }}
+        />
 
-        <label>Nickname (optional)</label>
+        <label>Nickname</label>
         <input placeholder="Gravel bike" value={nickname} onChange={(e) => setNickname(e.target.value)} style={{ marginBottom: 14 }} />
 
-        <label>Purchase date</label>
-        <input type="date" value={purchaseDate} onChange={(e) => setPurchaseDate(e.target.value)} style={{ marginBottom: 14 }} />
+        <label>
+          Purchase date <span style={{ color: 'var(--required)' }}>*</span>
+        </label>
+        <input
+          type="date"
+          required
+          value={purchaseDate}
+          onChange={(e) => setPurchaseDate(e.target.value)}
+          style={{ marginBottom: 14 }}
+        />
 
-        <label>Serial number (optional)</label>
+        <label>Serial number</label>
         <input value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} style={{ marginBottom: 14 }} />
 
-        <label htmlFor="receipt-input">Purchase receipt (optional)</label>
+        <label htmlFor="receipt-input">Purchase receipt</label>
         <label
           htmlFor="receipt-input"
           style={{
