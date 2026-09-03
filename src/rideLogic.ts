@@ -1,6 +1,10 @@
 import type { Bike, Component, RideEntry } from './types'
 import { generateId } from './types'
 
+// Distances can be fractional (12.5 km), and repeated += drifts into float noise
+// like 70.83000000000001. Round every stored running total to 2 decimals.
+const km = (n: number) => Math.round(n * 100) / 100
+
 export function insertRide(
   ride: Omit<RideEntry, 'id'>,
   bike: Bike,
@@ -10,21 +14,21 @@ export function insertRide(
 
   const updatedBike: Bike = {
     ...bike,
-    totalKm: bike.totalKm + ride.distanceKm,
+    totalKm: km(bike.totalKm + ride.distanceKm),
   }
 
   const updatedComponents = components.map((component) => {
     const isActiveOnThisBike =
       component.bikeId === ride.bikeId && component.status === 'active'
     if (!isActiveOnThisBike) return component
-    return { ...component, accumulatedKm: component.accumulatedKm + ride.distanceKm }
+    return { ...component, accumulatedKm: km(component.accumulatedKm + ride.distanceKm) }
   })
 
   return { newRide, updatedBike, updatedComponents }
 }
 
 export function adjustBikeForRideChange(bike: Bike, deltaKm: number): Bike {
-  return { ...bike, totalKm: bike.totalKm + deltaKm }
+  return { ...bike, totalKm: km(bike.totalKm + deltaKm) }
 }
 
 export function adjustComponentsForRideChange(
@@ -35,7 +39,7 @@ export function adjustComponentsForRideChange(
   return components.map((component) => {
     const isActiveOnThisBike = component.bikeId === bikeId && component.status === 'active'
     if (!isActiveOnThisBike) return component
-    return { ...component, accumulatedKm: component.accumulatedKm + deltaKm }
+    return { ...component, accumulatedKm: km(component.accumulatedKm + deltaKm) }
   })
 }
 
