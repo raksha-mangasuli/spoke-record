@@ -1,16 +1,17 @@
-import type { Bike, Component } from '../types'
+import type { Bike, Component, RideEntry } from '../types'
 import { BikeIcon } from './Shared'
 import { useImageUrl } from '../useImageUrl'
-import { getWearStatus } from '../wearStatus'
+import { getWearStatus, isStale } from '../wearStatus'
 
 interface Props {
   bikes: Bike[]
   components: Component[]
+  rides: RideEntry[]
   onSelectBike: (bikeId: string) => void
   onAddBike: () => void
 }
 
-export function BikeList({ bikes, components, onSelectBike, onAddBike }: Props) {
+export function BikeList({ bikes, components, rides, onSelectBike, onAddBike }: Props) {
   return (
     <div style={{ maxWidth: 420, margin: '0 auto', padding: 20 }}>
       <h1 style={{ fontSize: 20, fontWeight: 500, margin: '0 0 16px' }}>My bikes</h1>
@@ -25,6 +26,10 @@ export function BikeList({ bikes, components, onSelectBike, onAddBike }: Props) 
         {bikes.map((bike) => {
           const bikeComponents = components.filter((c) => c.bikeId === bike.id && c.status === 'active')
           const needsAttention = bikeComponents.some((c) => getWearStatus(c) !== 'fine')
+          const lastRide = rides
+            .filter((r) => r.bikeId === bike.id)
+            .reduce<string | undefined>((latest, r) => (!latest || r.date > latest ? r.date : latest), undefined)
+          const stale = isStale(lastRide)
           return (
             <div
               key={bike.id}
@@ -50,8 +55,15 @@ export function BikeList({ bikes, components, onSelectBike, onAddBike }: Props) 
                   {bike.totalKm.toLocaleString()} km total
                 </p>
               </div>
-              {needsAttention && (
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--wear-due-soon)' }} />
+              {stale ? (
+                <div
+                  title="No recent rides"
+                  style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--text-secondary)', opacity: 0.5 }}
+                />
+              ) : (
+                needsAttention && (
+                  <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--wear-due-soon)' }} />
+                )
               )}
             </div>
           )

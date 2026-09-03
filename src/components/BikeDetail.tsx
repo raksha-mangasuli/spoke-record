@@ -3,6 +3,8 @@ import type { Bike, Component, RideEntry } from '../types'
 import { COMPONENT_LABELS } from '../types'
 import { fileToDownscaledBlob } from '../imageUtils'
 import { useImageUrl } from '../useImageUrl'
+import { isStale } from '../wearStatus'
+import { ConfirmDialog } from './ConfirmDialog'
 import { BikeIcon, Chevron, ImageLightbox, WearBar, WearDot } from './Shared'
 
 interface Props {
@@ -15,6 +17,8 @@ interface Props {
   onSelectRide: (rideId: string) => void
   onViewAllRides: () => void
   onSetReceipt: (blob: Blob | undefined) => void
+  onEdit: () => void
+  onDelete: () => void
   onBack: () => void
 }
 
@@ -28,11 +32,14 @@ export function BikeDetail({
   onSelectRide,
   onViewAllRides,
   onSetReceipt,
+  onEdit,
+  onDelete,
   onBack,
 }: Props) {
   const receiptInputRef = useRef<HTMLInputElement>(null)
   const [showReceipt, setShowReceipt] = useState(false)
   const [showPhoto, setShowPhoto] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const photoUrl = useImageUrl(bike.photoUrl)
   const receiptUrl = useImageUrl(bike.purchaseReceiptUrl)
 
@@ -48,6 +55,7 @@ export function BikeDetail({
     .filter((r) => r.bikeId === bike.id)
     .sort((a, b) => b.date.localeCompare(a.date))
   const recentRides = bikeRides.slice(0, 5)
+  const stale = isStale(bikeRides[0]?.date)
 
   return (
     <div style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
@@ -80,7 +88,7 @@ export function BikeDetail({
             <BikeIcon size={28} />
           )}
         </div>
-        <div>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ margin: '0 0 2px', fontSize: 16, fontWeight: 500 }}>{bike.nickname || bike.make}</p>
           <p style={{ margin: 0, fontSize: 13, color: 'var(--text-secondary)' }}>
             {bike.make} {bike.model}
@@ -90,6 +98,12 @@ export function BikeDetail({
             {bike.totalKm.toLocaleString()} km total
           </p>
         </div>
+        <span
+          onClick={onEdit}
+          style={{ fontSize: 13, color: 'var(--accent)', cursor: 'pointer', flexShrink: 0, alignSelf: 'flex-start' }}
+        >
+          Edit
+        </span>
       </div>
 
       <div style={{ background: 'var(--surface)', borderRadius: '0 0 16px 16px', padding: '0 0 4px' }}>
@@ -104,16 +118,21 @@ export function BikeDetail({
 
         <div style={{ padding: '16px 20px', borderBottom: '0.5px solid var(--border)' }}>
           <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 10px' }}>Components</p>
+          {stale && (
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '0 0 10px', lineHeight: 1.4 }}>
+              No rides logged in 3+ weeks. Wear status may be out of date.
+            </p>
+          )}
           {activeComponents.map((component) => (
             <div
               key={component.id}
               onClick={() => onSelectComponent(component.id)}
               style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', cursor: 'pointer' }}
             >
-              <WearDot component={component} />
+              <WearDot component={component} stale={stale} />
               <div style={{ flex: 1 }}>
                 <p style={{ fontSize: 14, margin: '0 0 4px' }}>{COMPONENT_LABELS[component.type]}</p>
-                <WearBar component={component} />
+                <WearBar component={component} stale={stale} />
               </div>
               <span style={{ fontSize: 12, color: 'var(--text-secondary)', minWidth: 80, textAlign: 'right' }}>
                 {component.accumulatedKm}/{component.expectedLifespanKm}km
@@ -206,7 +225,34 @@ export function BikeDetail({
             </div>
           ))}
         </div>
+
+        <div style={{ padding: '14px 20px', borderTop: '0.5px solid var(--border)' }}>
+          <button
+            style={{
+              width: '100%',
+              background: 'transparent',
+              color: 'var(--wear-overdue)',
+              border: '0.5px solid var(--wear-overdue)',
+            }}
+            onClick={() => setShowDeleteConfirm(true)}
+          >
+            Delete bike
+          </button>
+        </div>
       </div>
+
+      {showDeleteConfirm && (
+        <ConfirmDialog
+          destructive
+          title={`Delete ${bike.nickname || `${bike.make} ${bike.model}`}?`}
+          body={`This removes the bike, its components, and ${bikeRides.length} logged ${
+            bikeRides.length === 1 ? 'ride' : 'rides'
+          }. This cannot be undone.`}
+          confirmLabel="Delete"
+          onCancel={() => setShowDeleteConfirm(false)}
+          onConfirm={onDelete}
+        />
+      )}
 
       {showPhoto && photoUrl && (
         <ImageLightbox

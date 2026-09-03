@@ -67,25 +67,29 @@ export function Chevron({ size = 16 }: { size?: number }) {
   )
 }
 
-export function WearBar({ component }: { component: Component }) {
+export function WearBar({ component, stale }: { component: Component; stale?: boolean }) {
   const status = getWearStatus(component)
   const ratio = getWearRatio(component)
-  const color = statusColor[status]
+  const color = stale ? 'var(--text-secondary)' : statusColor[status]
   return (
     <div style={{ flex: 1 }}>
       <div style={{ height: 4, background: 'var(--track-bg)', borderRadius: 2, overflow: 'hidden' }}>
-        <div style={{ height: '100%', width: `${ratio * 100}%`, background: color }} />
+        <div style={{ height: '100%', width: `${ratio * 100}%`, background: color, opacity: stale ? 0.5 : 1 }} />
       </div>
     </div>
   )
 }
 
-export function WearDot({ component }: { component: Component }) {
+export function WearDot({ component, stale }: { component: Component; stale?: boolean }) {
   const status = getWearStatus(component)
-  return <div style={{ width: 10, height: 10, borderRadius: '50%', background: statusColor[status], flexShrink: 0 }} />
+  const color = stale ? 'var(--text-secondary)' : statusColor[status]
+  return <div style={{ width: 10, height: 10, borderRadius: '50%', background: color, opacity: stale ? 0.5 : 1, flexShrink: 0 }} />
 }
 
-export function WearLabel({ component }: { component: Component }) {
+export function WearLabel({ component, stale }: { component: Component; stale?: boolean }) {
   const status = getWearStatus(component)
+  if (stale) {
+    return <span style={{ color: 'var(--text-secondary)', fontWeight: 500, fontSize: 13 }}>No recent rides</span>
+  }
   return <span style={{ color: statusColor[status], fontWeight: 500, fontSize: 13 }}>{statusLabel[status]}</span>
 }
