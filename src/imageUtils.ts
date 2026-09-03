@@ -1,17 +1,17 @@
-// Read an image File and return a data URL, downscaled so its longest edge is at
-// most maxDim px. Small images are returned as-is. Kept simple on purpose: the
-// output lands in localStorage next to the bike photo, so full-size phone
-// captures (3-5 MB) would otherwise crowd the ~5 MB quota.
-export async function fileToDownscaledDataUrl(
+// Read an image File and return a downscaled Blob, longest edge at most maxDim px.
+// Small images are returned unchanged. Kept simple on purpose: the output lands
+// in IndexedDB via imageStore, and full-size phone captures (3-5 MB) are worth
+// shrinking before they get there.
+export async function fileToDownscaledBlob(
   file: File,
   maxDim = 1600,
   quality = 0.85
-): Promise<string> {
+): Promise<Blob> {
   const originalDataUrl = await readAsDataUrl(file)
   const img = await loadImage(originalDataUrl)
 
   const longestEdge = Math.max(img.naturalWidth, img.naturalHeight)
-  if (longestEdge <= maxDim) return originalDataUrl
+  if (longestEdge <= maxDim) return file
 
   const scale = maxDim / longestEdge
   const canvas = document.createElement('canvas')
@@ -19,14 +19,21 @@ export async function fileToDownscaledDataUrl(
   canvas.height = Math.round(img.naturalHeight * scale)
 
   const ctx = canvas.getContext('2d')
-  if (!ctx) return originalDataUrl
+  if (!ctx) return file
 
   // White fill first so transparent PNGs do not flatten onto black.
   ctx.fillStyle = '#ffffff'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 
-  return canvas.toDataURL('image/jpeg', quality)
+  const blob = await canvasToBlob(canvas, quality)
+  return blob ?? file
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, quality: number): Promise<Blob | null> {
+  return new Promise((resolve) => {
+    canvas.toBlob((b) => resolve(b), 'image/jpeg', quality)
+  })
 }
 
 function readAsDataUrl(file: File): Promise<string> {

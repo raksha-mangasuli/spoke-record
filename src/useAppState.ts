@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Bike, Component, RideEntry, MaintenanceLogEntry, ComponentType } from './types'
 import { DEFAULT_LIFESPAN_KM, generateId } from './types'
 import { storage } from './storage'
+import { imageKey, putImage, deleteImage } from './imageStore'
 import { insertRide, editRide, deleteRide, retireComponent as retireComponentLogic } from './rideLogic'
 
 const DEFAULT_COMPONENT_TYPES: ComponentType[] = [
@@ -11,6 +12,10 @@ const DEFAULT_COMPONENT_TYPES: ComponentType[] = [
   'brake_pads_front',
   'brake_pads_rear',
 ]
+
+function reportImageError(e: unknown) {
+  console.error('Saving image to IndexedDB failed', e)
+}
 
 export function useAppState() {
   const [bikes, setBikes] = useState<Bike[]>(() => storage.loadBikes())
@@ -25,11 +30,55 @@ export function useAppState() {
   useEffect(() => storage.saveRides(rides), [rides])
   useEffect(() => storage.saveMaintenance(maintenance), [maintenance])
 
-  function addBike(input: Omit<Bike, 'id' | 'totalKm'>) {
-    const bike: Bike = { ...input, id: generateId(), totalKm: 0 }
+  // One-time move of legacy data-URL images (stored inline in localStorage
+  // before the IndexedDB switch) into imageStore, rewriting each bike field to
+  // the new key. Idempotent: after one pass no `data:` values remain.
+  useEffect(() => {
+    if (localStorage.getItem('spoke-record:img-migrated')) return
+    let cancelled = false
+    void (async () => {
+      const rewrites: Record<string, Partial<Bike>> = {}
+      for (const b of storage.loadBikes()) {
+        const patch: Partial<Bike> = {}
+        if (b.photoUrl?.startsWith('data:')) {
+          const key = imageKey(b.id, 'photo')
+          await putImage(key, await (await fetch(b.photoUrl)).blob())
+          patch.photoUrl = key
+        }
+        if (b.purchaseReceiptUrl?.startsWith('data:')) {
+          const key = imageKey(b.id, 'receipt')
+          await putImage(key, await (await fetch(b.purchaseReceiptUrl)).blob())
+          patch.purchaseReceiptUrl = key
+        }
+        if (Object.keys(patch).length > 0) rewrites[b.id] = patch
+      }
+      if (cancelled) return
+      if (Object.keys(rewrites).length > 0) {
+        setBikes((prev) => prev.map((b) => (rewrites[b.id] ? { ...b, ...rewrites[b.id] } : b)))
+      }
+      localStorage.setItem('spoke-record:img-migrated', '1')
+    })().catch((e) => console.error('image migration failed', e))
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  function addBike(
+    input: Omit<Bike, 'id' | 'totalKm' | 'photoUrl' | 'purchaseReceiptUrl'>,
+    photoBlob?: Blob,
+    receiptBlob?: Blob
+  ) {
+    const id = generateId()
+    const bike: Bike = {
+      ...input,
+      id,
+      totalKm: 0,
+      photoUrl: photoBlob ? imageKey(id, 'photo') : undefined,
+      purchaseReceiptUrl: receiptBlob ? imageKey(id, 'receipt') : undefined,
+    }
     const newComponents: Component[] = DEFAULT_COMPONENT_TYPES.map((type) => ({
       id: generateId(),
-      bikeId: bike.id,
+      bikeId: id,
       type,
       installDate: bike.purchaseDate,
       installOdometerKm: 0,
@@ -39,6 +88,10 @@ export function useAppState() {
     }))
     setBikes((prev) => [...prev, bike])
     setComponents((prev) => [...prev, ...newComponents])
+    // Not awaited: the bike's structured data is already saved, so an image
+    // write failure degrades to a missing thumbnail rather than losing the bike.
+    if (photoBlob) putImage(imageKey(id, 'photo'), photoBlob).catch(reportImageError)
+    if (receiptBlob) putImage(imageKey(id, 'receipt'), receiptBlob).catch(reportImageError)
     return bike
   }
 
@@ -85,8 +138,19 @@ export function useAppState() {
     setComponents(updatedComponents)
   }
 
-  function setBikeReceipt(bikeId: string, purchaseReceiptUrl: string | undefined) {
-    setBikes((prev) => prev.map((b) => (b.id === bikeId ? { ...b, purchaseReceiptUrl } : b)))
+  function setBikeReceipt(bikeId: string, blob: Blob | undefined) {
+    const key = imageKey(bikeId, 'receipt')
+    if (blob) {
+      putImage(key, blob).catch(reportImageError)
+      setBikes((prev) =>
+        prev.map((b) => (b.id === bikeId ? { ...b, purchaseReceiptUrl: key } : b))
+      )
+    } else {
+      deleteImage(key).catch(() => {})
+      setBikes((prev) =>
+        prev.map((b) => (b.id === bikeId ? { ...b, purchaseReceiptUrl: undefined } : b))
+      )
+    }
   }
 
   function addMaintenanceEntry(input: Omit<MaintenanceLogEntry, 'id'>) {

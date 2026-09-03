@@ -13,8 +13,8 @@ export interface Bike {
   model: string
   nickname?: string
   purchaseDate: string // ISO date
-  photoUrl?: string
-  purchaseReceiptUrl?: string // downscaled image data URL of the purchase bill, user-attachable
+  photoUrl?: string // IndexedDB image key (see imageStore), not a data URL
+  purchaseReceiptUrl?: string // IndexedDB image key for the purchase bill (see imageStore), not a data URL
   serialNumber?: string
   totalKm: number
 }

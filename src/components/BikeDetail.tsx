@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 import type { Bike, Component, RideEntry } from '../types'
 import { COMPONENT_LABELS } from '../types'
-import { fileToDownscaledDataUrl } from '../imageUtils'
+import { fileToDownscaledBlob } from '../imageUtils'
+import { useImageUrl } from '../useImageUrl'
 import { BikeIcon, Chevron, ImageLightbox, WearBar, WearDot } from './Shared'
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
   onSelectComponent: (componentId: string) => void
   onSelectRide: (rideId: string) => void
   onViewAllRides: () => void
-  onSetReceipt: (url: string | undefined) => void
+  onSetReceipt: (blob: Blob | undefined) => void
   onBack: () => void
 }
 
@@ -31,12 +32,14 @@ export function BikeDetail({
 }: Props) {
   const receiptInputRef = useRef<HTMLInputElement>(null)
   const [showReceipt, setShowReceipt] = useState(false)
+  const photoUrl = useImageUrl(bike.photoUrl)
+  const receiptUrl = useImageUrl(bike.purchaseReceiptUrl)
 
   function handleReceiptChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     e.target.value = ''
     if (!file) return
-    fileToDownscaledDataUrl(file).then(onSetReceipt).catch(() => {})
+    fileToDownscaledBlob(file).then(onSetReceipt).catch(() => {})
   }
 
   const activeComponents = components.filter((c) => c.bikeId === bike.id && c.status === 'active')
@@ -68,8 +71,8 @@ export function BikeDetail({
             overflow: 'hidden',
           }}
         >
-          {bike.photoUrl ? (
-            <img src={bike.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          {photoUrl ? (
+            <img src={photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
             <BikeIcon size={28} />
           )}
@@ -131,7 +134,9 @@ export function BikeDetail({
                 style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0, cursor: 'pointer' }}
               >
                 <div style={{ width: 44, height: 34, borderRadius: 4, border: '0.5px solid var(--border)', background: '#fff', overflow: 'hidden', flexShrink: 0 }}>
-                  <img src={bike.purchaseReceiptUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  {receiptUrl && (
+                    <img src={receiptUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  )}
                 </div>
                 <p style={{ fontSize: 14, margin: 0, flex: 1 }}>Purchase receipt</p>
                 <Chevron size={16} />
@@ -200,8 +205,8 @@ export function BikeDetail({
         </div>
       </div>
 
-      {showReceipt && bike.purchaseReceiptUrl && (
-        <ImageLightbox src={bike.purchaseReceiptUrl} onClose={() => setShowReceipt(false)} />
+      {showReceipt && receiptUrl && (
+        <ImageLightbox src={receiptUrl} onClose={() => setShowReceipt(false)} />
       )}
     </div>
   )

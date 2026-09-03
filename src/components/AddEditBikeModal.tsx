@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { fileToDownscaledDataUrl } from '../imageUtils'
+import { fileToDownscaledBlob } from '../imageUtils'
+import { useBlobUrl } from '../useImageUrl'
 
 interface Props {
   onSave: (
@@ -8,8 +9,8 @@ interface Props {
     nickname: string,
     purchaseDate: string,
     serialNumber: string,
-    photoUrl?: string,
-    purchaseReceiptUrl?: string
+    photoBlob?: Blob,
+    receiptBlob?: Blob
   ) => void
   onCancel: () => void
 }
@@ -20,24 +21,26 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
   const [nickname, setNickname] = useState('')
   const [purchaseDate, setPurchaseDate] = useState(() => new Date().toISOString().split('T')[0])
   const [serialNumber, setSerialNumber] = useState('')
-  const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined)
-  const [purchaseReceiptUrl, setPurchaseReceiptUrl] = useState<string | undefined>(undefined)
+  const [photoBlob, setPhotoBlob] = useState<Blob | undefined>(undefined)
+  const [receiptBlob, setReceiptBlob] = useState<Blob | undefined>(undefined)
+  const photoUrl = useBlobUrl(photoBlob)
+  const purchaseReceiptUrl = useBlobUrl(receiptBlob)
 
   const canSave = make.trim().length > 0 && model.trim().length > 0
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    fileToDownscaledDataUrl(file)
-      .then(setPhotoUrl)
+    fileToDownscaledBlob(file)
+      .then(setPhotoBlob)
       .catch(() => {})
   }
 
   function handleReceiptChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    fileToDownscaledDataUrl(file)
-      .then(setPurchaseReceiptUrl)
+    fileToDownscaledBlob(file)
+      .then(setReceiptBlob)
       .catch(() => {})
   }
 
@@ -127,7 +130,7 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
             className="primary"
             style={{ flex: 1 }}
             disabled={!canSave}
-            onClick={() => onSave(make, model, nickname, purchaseDate, serialNumber, photoUrl, purchaseReceiptUrl)}
+            onClick={() => onSave(make, model, nickname, purchaseDate, serialNumber, photoBlob, receiptBlob)}
           >
             Save bike
           </button>
