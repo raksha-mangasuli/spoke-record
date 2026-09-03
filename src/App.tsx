@@ -50,6 +50,7 @@ export default function App() {
         <BikeList
           bikes={state.bikes}
           components={state.components}
+          rides={state.rides}
           onSelectBike={(bikeId) => setView({ name: 'bike', bikeId })}
           onAddBike={() => setBikeForm({ mode: 'add' })}
         />

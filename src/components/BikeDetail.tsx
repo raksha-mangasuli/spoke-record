@@ -3,6 +3,7 @@ import type { Bike, Component, RideEntry } from '../types'
 import { COMPONENT_LABELS } from '../types'
 import { fileToDownscaledBlob } from '../imageUtils'
 import { useImageUrl } from '../useImageUrl'
+import { isStale } from '../wearStatus'
 import { BikeIcon, Chevron, ImageLightbox, WearBar, WearDot } from './Shared'
 
 interface Props {
@@ -50,6 +51,7 @@ export function BikeDetail({
     .filter((r) => r.bikeId === bike.id)
     .sort((a, b) => b.date.localeCompare(a.date))
   const recentRides = bikeRides.slice(0, 5)
+  const stale = isStale(bikeRides[0]?.date)
 
   return (
     <div style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
@@ -112,16 +114,21 @@ export function BikeDetail({
 
         <div style={{ padding: '16px 20px', borderBottom: '0.5px solid var(--border)' }}>
           <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: '0 0 10px' }}>Components</p>
+          {stale && (
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '0 0 10px', lineHeight: 1.4 }}>
+              No rides logged in 3+ weeks. Wear status may be out of date.
+            </p>
+          )}
           {activeComponents.map((component) => (
             <div
               key={component.id}
               onClick={() => onSelectComponent(component.id)}
               style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', cursor: 'pointer' }}
             >
-              <WearDot component={component} />
+              <WearDot component={component} stale={stale} />
               <div style={{ flex: 1 }}>
                 <p style={{ fontSize: 14, margin: '0 0 4px' }}>{COMPONENT_LABELS[component.type]}</p>
-                <WearBar component={component} />
+                <WearBar component={component} stale={stale} />
               </div>
               <span style={{ fontSize: 12, color: 'var(--text-secondary)', minWidth: 80, textAlign: 'right' }}>
                 {component.accumulatedKm}/{component.expectedLifespanKm}km
