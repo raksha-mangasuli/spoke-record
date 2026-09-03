@@ -22,13 +22,17 @@ export default function App() {
   const [view, setView] = useState<View>({ name: 'list' })
   const [showLogRide, setShowLogRide] = useState(false)
   const [showAddMaintenance, setShowAddMaintenance] = useState(false)
-  const [showAddBike, setShowAddBike] = useState(false)
+  const [bikeForm, setBikeForm] = useState<null | { mode: 'add' } | { mode: 'edit'; bikeId: string }>(
+    null
+  )
 
   const currentBike = view.name !== 'list' ? state.bikes.find((b) => b.id === view.bikeId) : undefined
   const currentComponent =
     view.name === 'component' ? state.components.find((c) => c.id === view.componentId) : undefined
   const currentRide =
     view.name === 'ride' ? state.rides.find((r) => r.id === view.rideId) : undefined
+  const editingBike =
+    bikeForm?.mode === 'edit' ? state.bikes.find((b) => b.id === bikeForm.bikeId) : undefined
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', justifyContent: 'center', padding: '32px 16px' }}>
@@ -47,7 +51,7 @@ export default function App() {
           bikes={state.bikes}
           components={state.components}
           onSelectBike={(bikeId) => setView({ name: 'bike', bikeId })}
-          onAddBike={() => setShowAddBike(true)}
+          onAddBike={() => setBikeForm({ mode: 'add' })}
         />
       )}
 
@@ -62,6 +66,7 @@ export default function App() {
           onSelectRide={(rideId) => setView({ name: 'ride', rideId, bikeId: currentBike.id, from: 'bike' })}
           onViewAllRides={() => setView({ name: 'rides', bikeId: currentBike.id })}
           onSetReceipt={(blob) => state.setBikeReceipt(currentBike.id, blob)}
+          onEdit={() => setBikeForm({ mode: 'edit', bikeId: currentBike.id })}
           onBack={() => setView({ name: 'list' })}
         />
       )}
@@ -135,9 +140,9 @@ export default function App() {
         />
       )}
 
-      {showAddBike && (
+      {bikeForm?.mode === 'add' && (
         <AddEditBikeModal
-          onCancel={() => setShowAddBike(false)}
+          onCancel={() => setBikeForm(null)}
           onSave={(make, model, nickname, purchaseDate, serialNumber, photoBlob, receiptBlob) => {
             const bike = state.addBike(
               {
@@ -150,8 +155,32 @@ export default function App() {
               photoBlob,
               receiptBlob
             )
-            setShowAddBike(false)
+            setBikeForm(null)
             setView({ name: 'bike', bikeId: bike.id })
+          }}
+        />
+      )}
+
+      {bikeForm?.mode === 'edit' && editingBike && (
+        <AddEditBikeModal
+          initial={{
+            make: editingBike.make,
+            model: editingBike.model,
+            nickname: editingBike.nickname ?? '',
+            purchaseDate: editingBike.purchaseDate,
+            serialNumber: editingBike.serialNumber ?? '',
+          }}
+          initialPhotoKey={editingBike.photoUrl}
+          initialReceiptKey={editingBike.purchaseReceiptUrl}
+          onCancel={() => setBikeForm(null)}
+          onSave={(make, model, nickname, purchaseDate, serialNumber, photoBlob, receiptBlob) => {
+            state.updateBike(
+              editingBike.id,
+              { make, model, nickname, purchaseDate, serialNumber },
+              photoBlob,
+              receiptBlob
+            )
+            setBikeForm(null)
           }}
         />
       )}

@@ -95,6 +95,31 @@ export function useAppState() {
     return bike
   }
 
+  function updateBike(
+    bikeId: string,
+    fields: { make: string; model: string; nickname: string; purchaseDate: string; serialNumber: string },
+    photoBlob?: Blob,
+    receiptBlob?: Blob
+  ) {
+    setBikes((prev) =>
+      prev.map((b) => {
+        if (b.id !== bikeId) return b
+        return {
+          ...b,
+          make: fields.make,
+          model: fields.model,
+          nickname: fields.nickname || undefined,
+          purchaseDate: fields.purchaseDate,
+          serialNumber: fields.serialNumber || undefined,
+          photoUrl: photoBlob ? imageKey(bikeId, 'photo') : b.photoUrl,
+          purchaseReceiptUrl: receiptBlob ? imageKey(bikeId, 'receipt') : b.purchaseReceiptUrl,
+        }
+      })
+    )
+    if (photoBlob) putImage(imageKey(bikeId, 'photo'), photoBlob).catch(reportImageError)
+    if (receiptBlob) putImage(imageKey(bikeId, 'receipt'), receiptBlob).catch(reportImageError)
+  }
+
   function addRide(input: Omit<RideEntry, 'id'>) {
     const bike = bikes.find((b) => b.id === input.bikeId)
     if (!bike) return
@@ -178,6 +203,7 @@ export function useAppState() {
     rides,
     maintenance,
     addBike,
+    updateBike,
     addRide,
     updateRide,
     removeRide,

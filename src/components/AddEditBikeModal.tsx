@@ -1,6 +1,14 @@
 import { useState } from 'react'
 import { fileToDownscaledBlob } from '../imageUtils'
-import { useBlobUrl } from '../useImageUrl'
+import { useBlobUrl, useImageUrl } from '../useImageUrl'
+
+interface BikeFields {
+  make: string
+  model: string
+  nickname: string
+  purchaseDate: string
+  serialNumber: string
+}
 
 interface Props {
   onSave: (
@@ -13,18 +21,37 @@ interface Props {
     receiptBlob?: Blob
   ) => void
   onCancel: () => void
+  initial?: BikeFields
+  initialPhotoKey?: string
+  initialReceiptKey?: string
 }
 
-export function AddEditBikeModal({ onSave, onCancel }: Props) {
-  const [make, setMake] = useState('')
-  const [model, setModel] = useState('')
-  const [nickname, setNickname] = useState('')
-  const [purchaseDate, setPurchaseDate] = useState(() => new Date().toISOString().split('T')[0])
-  const [serialNumber, setSerialNumber] = useState('')
+export function AddEditBikeModal({
+  onSave,
+  onCancel,
+  initial,
+  initialPhotoKey,
+  initialReceiptKey,
+}: Props) {
+  const editing = initial != null
+  const [make, setMake] = useState(initial?.make ?? '')
+  const [model, setModel] = useState(initial?.model ?? '')
+  const [nickname, setNickname] = useState(initial?.nickname ?? '')
+  const [purchaseDate, setPurchaseDate] = useState(
+    () => initial?.purchaseDate || new Date().toISOString().split('T')[0]
+  )
+  const [serialNumber, setSerialNumber] = useState(initial?.serialNumber ?? '')
   const [photoBlob, setPhotoBlob] = useState<Blob | undefined>(undefined)
   const [receiptBlob, setReceiptBlob] = useState<Blob | undefined>(undefined)
-  const photoUrl = useBlobUrl(photoBlob)
-  const purchaseReceiptUrl = useBlobUrl(receiptBlob)
+  // Show the newly picked image if there is one, otherwise the bike's current
+  // stored image (edit mode only). Both hooks run every render; ?? only picks
+  // between their results.
+  const pickedPhotoUrl = useBlobUrl(photoBlob)
+  const existingPhotoUrl = useImageUrl(initialPhotoKey)
+  const photoUrl = pickedPhotoUrl ?? existingPhotoUrl
+  const pickedReceiptUrl = useBlobUrl(receiptBlob)
+  const existingReceiptUrl = useImageUrl(initialReceiptKey)
+  const purchaseReceiptUrl = pickedReceiptUrl ?? existingReceiptUrl
 
   const canSave =
     make.trim().length > 0 && model.trim().length > 0 && purchaseDate.length > 0
@@ -49,7 +76,7 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
     <div style={overlayStyle}>
       <div style={modalStyle}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-          <p style={{ fontSize: 16, fontWeight: 500, margin: 0 }}>Add bike</p>
+          <p style={{ fontSize: 16, fontWeight: 500, margin: 0 }}>{editing ? 'Edit bike' : 'Add bike'}</p>
           <span onClick={onCancel} style={{ cursor: 'pointer', color: 'var(--text-secondary)' }}>✕</span>
         </div>
 
@@ -157,7 +184,7 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
             disabled={!canSave}
             onClick={() => onSave(make, model, nickname, purchaseDate, serialNumber, photoBlob, receiptBlob)}
           >
-            Save bike
+            {editing ? 'Save changes' : 'Save bike'}
           </button>
         </div>
       </div>

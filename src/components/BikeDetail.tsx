@@ -15,6 +15,7 @@ interface Props {
   onSelectRide: (rideId: string) => void
   onViewAllRides: () => void
   onSetReceipt: (blob: Blob | undefined) => void
+  onEdit: () => void
   onBack: () => void
 }
 
@@ -28,6 +29,7 @@ export function BikeDetail({
   onSelectRide,
   onViewAllRides,
   onSetReceipt,
+  onEdit,
   onBack,
 }: Props) {
   const receiptInputRef = useRef<HTMLInputElement>(null)
@@ -80,7 +82,7 @@ export function BikeDetail({
             <BikeIcon size={28} />
           )}
         </div>
-        <div>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ margin: '0 0 2px', fontSize: 16, fontWeight: 500 }}>{bike.nickname || bike.make}</p>
           <p style={{ margin: 0, fontSize: 13, color: 'var(--text-secondary)' }}>
             {bike.make} {bike.model}
@@ -90,6 +92,12 @@ export function BikeDetail({
             {bike.totalKm.toLocaleString()} km total
           </p>
         </div>
+        <span
+          onClick={onEdit}
+          style={{ fontSize: 13, color: 'var(--accent)', cursor: 'pointer', flexShrink: 0, alignSelf: 'flex-start' }}
+        >
+          Edit
+        </span>
       </div>
 
       <div style={{ background: 'var(--surface)', borderRadius: '0 0 16px 16px', padding: '0 0 4px' }}>
