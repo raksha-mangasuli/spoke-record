@@ -104,6 +104,8 @@ Palette (bound to Figma variables, check the file for current values, don't hard
 ## Conventions
 
 - No em dashes in any generated text (code comments, commit messages, docs).
+- All displayed numbers go through `formatNumber` in `src/format.ts`: comma thousands separator, dot decimal, max 2 decimals, pinned to en-US. Never render a raw number or a bare `.toLocaleString()` in the UI.
+- All displayed dates go through `formatDate` / `formatMonthYear` / `formatLongDate` in `src/format.ts` (all en-US, parsed at local midnight). Never render a raw ISO date string or a per-file date formatter. `<input type="date">` values stay ISO.
 - Small, isolated commits over bundled changes.
 - Plan mode before structural edits.
 - Specific, non-generic commit messages.

@@ -2,6 +2,7 @@ import type { Bike, Component, RideEntry } from '../types'
 import { BikeIcon } from './Shared'
 import { useImageUrl } from '../useImageUrl'
 import { getWearStatus, isStale } from '../wearStatus'
+import { formatNumber } from '../format'
 
 interface Props {
   bikes: Bike[]
@@ -52,7 +53,7 @@ export function BikeList({ bikes, components, rides, onSelectBike, onAddBike }: 
                   {bike.make} {bike.model}
                 </p>
                 <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
-                  {bike.totalKm.toLocaleString()} km total
+                  {formatNumber(bike.totalKm)} km total
                 </p>
               </div>
               {stale ? (
