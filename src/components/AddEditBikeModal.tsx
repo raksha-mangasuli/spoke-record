@@ -76,11 +76,27 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
         </label>
         <input id="photo-input" type="file" accept="image/*" onChange={handlePhotoChange} style={{ display: 'none' }} />
 
-        <label>Make</label>
-        <input placeholder="Canyon" value={make} onChange={(e) => setMake(e.target.value)} style={{ marginBottom: 14 }} />
+        <label>
+          Make <span style={{ color: 'var(--accent)' }}>*</span>
+        </label>
+        <input
+          placeholder="Canyon"
+          required
+          value={make}
+          onChange={(e) => setMake(e.target.value)}
+          style={{ marginBottom: 14 }}
+        />
 
-        <label>Model</label>
-        <input placeholder="Grail" value={model} onChange={(e) => setModel(e.target.value)} style={{ marginBottom: 14 }} />
+        <label>
+          Model <span style={{ color: 'var(--accent)' }}>*</span>
+        </label>
+        <input
+          placeholder="Grail"
+          required
+          value={model}
+          onChange={(e) => setModel(e.target.value)}
+          style={{ marginBottom: 14 }}
+        />
 
         <label>Nickname (optional)</label>
         <input placeholder="Gravel bike" value={nickname} onChange={(e) => setNickname(e.target.value)} style={{ marginBottom: 14 }} />
