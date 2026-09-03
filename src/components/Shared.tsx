@@ -30,7 +30,15 @@ const statusLabel: Record<string, string> = {
   overdue: 'Overdue',
 }
 
-export function ImageLightbox({ src, onClose }: { src: string; onClose: () => void }) {
+export function ImageLightbox({
+  src,
+  onClose,
+  alt = 'Image',
+}: {
+  src: string
+  onClose: () => void
+  alt?: string
+}) {
   return (
     <div
       onClick={onClose}
@@ -46,7 +54,7 @@ export function ImageLightbox({ src, onClose }: { src: string; onClose: () => vo
         cursor: 'zoom-out',
       }}
     >
-      <img src={src} alt="Purchase receipt" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: 4 }} />
+      <img src={src} alt={alt} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: 4 }} />
     </div>
   )
 }

@@ -32,6 +32,7 @@ export function BikeDetail({
 }: Props) {
   const receiptInputRef = useRef<HTMLInputElement>(null)
   const [showReceipt, setShowReceipt] = useState(false)
+  const [showPhoto, setShowPhoto] = useState(false)
   const photoUrl = useImageUrl(bike.photoUrl)
   const receiptUrl = useImageUrl(bike.purchaseReceiptUrl)
 
@@ -59,6 +60,7 @@ export function BikeDetail({
 
       <div style={{ background: 'var(--header-tint)', borderRadius: '16px 16px 0 0', padding: '16px 20px', display: 'flex', gap: 12, alignItems: 'center' }}>
         <div
+          onClick={photoUrl ? () => setShowPhoto(true) : undefined}
           style={{
             width: 56,
             height: 56,
@@ -69,6 +71,7 @@ export function BikeDetail({
             justifyContent: 'center',
             flexShrink: 0,
             overflow: 'hidden',
+            cursor: photoUrl ? 'pointer' : 'default',
           }}
         >
           {photoUrl ? (
@@ -205,8 +208,16 @@ export function BikeDetail({
         </div>
       </div>
 
+      {showPhoto && photoUrl && (
+        <ImageLightbox
+          src={photoUrl}
+          alt={`${bike.make} ${bike.model}`}
+          onClose={() => setShowPhoto(false)}
+        />
+      )}
+
       {showReceipt && receiptUrl && (
-        <ImageLightbox src={receiptUrl} onClose={() => setShowReceipt(false)} />
+        <ImageLightbox src={receiptUrl} alt="Purchase receipt" onClose={() => setShowReceipt(false)} />
       )}
     </div>
   )
