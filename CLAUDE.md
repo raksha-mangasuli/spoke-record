@@ -28,6 +28,7 @@ interface Bike {
   nickname?: string;
   purchaseDate: string; // ISO date
   photoUrl?: string;
+  purchaseReceiptUrl?: string; // downscaled image of the purchase bill, added deliberately post-lock
   serialNumber?: string;
   totalKm: number; // stored, updated on ride insert/edit/delete
 }

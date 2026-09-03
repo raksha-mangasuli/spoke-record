@@ -14,6 +14,7 @@ export interface Bike {
   nickname?: string
   purchaseDate: string // ISO date
   photoUrl?: string
+  purchaseReceiptUrl?: string // downscaled image data URL of the purchase bill, user-attachable
   serialNumber?: string
   totalKm: number
 }
