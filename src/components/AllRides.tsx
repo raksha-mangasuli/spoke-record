@@ -1,5 +1,5 @@
 import type { Bike, RideEntry } from '../types'
-import { formatNumber } from '../format'
+import { formatDate, formatNumber } from '../format'
 import { Chevron } from './Shared'
 
 interface Props {
@@ -49,7 +49,7 @@ export function AllRides({ bike, rides, onSelectRide, onBack }: Props) {
             }}
           >
             <div style={{ minWidth: 0 }}>
-              <p style={{ fontSize: 13, margin: 0 }}>{formatShortDate(ride.date)}</p>
+              <p style={{ fontSize: 13, margin: 0 }}>{formatDate(ride.date)}</p>
               {ride.notes && (
                 <p style={{ fontSize: 12, margin: '1px 0 0', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {ride.notes}
@@ -65,10 +65,4 @@ export function AllRides({ bike, rides, onSelectRide, onBack }: Props) {
       </div>
     </div>
   )
-}
-
-function formatShortDate(iso: string) {
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }

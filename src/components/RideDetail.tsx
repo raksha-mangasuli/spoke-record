@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { RideEntry } from '../types'
-import { formatNumber } from '../format'
+import { formatLongDate, formatNumber } from '../format'
 import { ConfirmDialog } from './ConfirmDialog'
 
 interface Props {
@@ -100,10 +100,4 @@ export function RideDetail({ ride, onSave, onDelete, onBack }: Props) {
       )}
     </div>
   )
-}
-
-function formatLongDate(iso: string) {
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 }

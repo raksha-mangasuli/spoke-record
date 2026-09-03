@@ -1,6 +1,6 @@
 import type { Component, MaintenanceLogEntry } from '../types'
 import { COMPONENT_LABELS } from '../types'
-import { formatNumber } from '../format'
+import { formatDate, formatNumber } from '../format'
 import { WearBar, WearLabel } from './Shared'
 
 interface Props {
@@ -37,7 +37,7 @@ export function ComponentDetail({ component, maintenance, onRetire, onBack }: Pr
         </div>
 
         <div style={{ padding: 16, borderBottom: '0.5px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <Row label="Install date" value={component.installDate} />
+          <Row label="Install date" value={formatDate(component.installDate)} />
           <Row label="Install odometer" value={`${formatNumber(component.installOdometerKm)} km`} />
           <Row label="Expected lifespan" value={`${formatNumber(component.expectedLifespanKm)} km`} />
         </div>
@@ -48,7 +48,7 @@ export function ComponentDetail({ component, maintenance, onRetire, onBack }: Pr
           {history.map((entry) => (
             <div key={entry.id} style={{ marginBottom: 8 }}>
               <p style={{ fontSize: 14, margin: 0 }}>{entry.description}</p>
-              <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0 }}>{entry.date}</p>
+              <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: 0 }}>{formatDate(entry.date)}</p>
             </div>
           ))}
         </div>
