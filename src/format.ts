@@ -1,8 +1,9 @@
-// One number format across the whole app: comma thousands separator, dot
-// decimal, at most 2 decimal places. Pinned to en-US so it does not shift with
-// the viewer's browser locale (which is what made totals render inconsistently).
+// One number format across the whole app: no thousands grouping, dot decimal,
+// at most 2 decimal places, so the only separator that ever appears on screen is
+// the decimal point (2000, not 2,000). Pinned to en-US so it does not shift with
+// the viewer's browser locale.
 export function formatNumber(n: number): string {
-  return n.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  return n.toLocaleString('en-US', { maximumFractionDigits: 2, useGrouping: false })
 }
 
 // Dates are stored as yyyy-mm-dd. Parse them at local midnight, not UTC, so a
