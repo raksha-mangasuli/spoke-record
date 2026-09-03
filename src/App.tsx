@@ -68,6 +68,10 @@ export default function App() {
           onViewAllRides={() => setView({ name: 'rides', bikeId: currentBike.id })}
           onSetReceipt={(blob) => state.setBikeReceipt(currentBike.id, blob)}
           onEdit={() => setBikeForm({ mode: 'edit', bikeId: currentBike.id })}
+          onDelete={() => {
+            state.deleteBike(currentBike.id)
+            setView({ name: 'list' })
+          }}
           onBack={() => setView({ name: 'list' })}
         />
       )}

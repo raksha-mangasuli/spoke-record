@@ -163,6 +163,15 @@ export function useAppState() {
     setComponents(updatedComponents)
   }
 
+  function deleteBike(bikeId: string) {
+    deleteImage(imageKey(bikeId, 'photo')).catch(() => {})
+    deleteImage(imageKey(bikeId, 'receipt')).catch(() => {})
+    setBikes((prev) => prev.filter((b) => b.id !== bikeId))
+    setComponents((prev) => prev.filter((c) => c.bikeId !== bikeId))
+    setRides((prev) => prev.filter((r) => r.bikeId !== bikeId))
+    setMaintenance((prev) => prev.filter((m) => m.bikeId !== bikeId))
+  }
+
   function setBikeReceipt(bikeId: string, blob: Blob | undefined) {
     const key = imageKey(bikeId, 'receipt')
     if (blob) {
@@ -204,6 +213,7 @@ export function useAppState() {
     maintenance,
     addBike,
     updateBike,
+    deleteBike,
     addRide,
     updateRide,
     removeRide,

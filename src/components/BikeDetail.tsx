@@ -4,6 +4,7 @@ import { COMPONENT_LABELS } from '../types'
 import { fileToDownscaledBlob } from '../imageUtils'
 import { useImageUrl } from '../useImageUrl'
 import { isStale } from '../wearStatus'
+import { ConfirmDialog } from './ConfirmDialog'
 import { BikeIcon, Chevron, ImageLightbox, WearBar, WearDot } from './Shared'
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
   onViewAllRides: () => void
   onSetReceipt: (blob: Blob | undefined) => void
   onEdit: () => void
+  onDelete: () => void
   onBack: () => void
 }
 
@@ -31,11 +33,13 @@ export function BikeDetail({
   onViewAllRides,
   onSetReceipt,
   onEdit,
+  onDelete,
   onBack,
 }: Props) {
   const receiptInputRef = useRef<HTMLInputElement>(null)
   const [showReceipt, setShowReceipt] = useState(false)
   const [showPhoto, setShowPhoto] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const photoUrl = useImageUrl(bike.photoUrl)
   const receiptUrl = useImageUrl(bike.purchaseReceiptUrl)
 
@@ -221,7 +225,34 @@ export function BikeDetail({
             </div>
           ))}
         </div>
+
+        <div style={{ padding: '14px 20px', borderTop: '0.5px solid var(--border)' }}>
+          <button
+            style={{
+              width: '100%',
+              background: 'transparent',
+              color: 'var(--wear-overdue)',
+              border: '0.5px solid var(--wear-overdue)',
+            }}
+            onClick={() => setShowDeleteConfirm(true)}
+          >
+            Delete bike
+          </button>
+        </div>
       </div>
+
+      {showDeleteConfirm && (
+        <ConfirmDialog
+          destructive
+          title={`Delete ${bike.nickname || `${bike.make} ${bike.model}`}?`}
+          body={`This removes the bike, its components, and ${bikeRides.length} logged ${
+            bikeRides.length === 1 ? 'ride' : 'rides'
+          }. This cannot be undone.`}
+          confirmLabel="Delete"
+          onCancel={() => setShowDeleteConfirm(false)}
+          onConfirm={onDelete}
+        />
+      )}
 
       {showPhoto && photoUrl && (
         <ImageLightbox
