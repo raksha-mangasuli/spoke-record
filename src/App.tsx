@@ -5,6 +5,7 @@ import { BikeList } from './components/BikeList'
 import { BikeDetail } from './components/BikeDetail'
 import { ComponentDetail } from './components/ComponentDetail'
 import { RideDetail } from './components/RideDetail'
+import { AllRides } from './components/AllRides'
 import { LogRideModal } from './components/LogRideModal'
 import { AddMaintenanceModal } from './components/AddMaintenanceModal'
 import { AddEditBikeModal } from './components/AddEditBikeModal'
@@ -59,7 +60,17 @@ export default function App() {
           onAddMaintenance={() => setShowAddMaintenance(true)}
           onSelectComponent={(componentId) => setView({ name: 'component', componentId, bikeId: currentBike.id })}
           onSelectRide={(rideId) => setView({ name: 'ride', rideId, bikeId: currentBike.id, from: 'bike' })}
+          onViewAllRides={() => setView({ name: 'rides', bikeId: currentBike.id })}
           onBack={() => setView({ name: 'list' })}
+        />
+      )}
+
+      {view.name === 'rides' && currentBike && (
+        <AllRides
+          bike={currentBike}
+          rides={state.rides}
+          onSelectRide={(rideId) => setView({ name: 'ride', rideId, bikeId: currentBike.id, from: 'rides' })}
+          onBack={() => setView({ name: 'bike', bikeId: currentBike.id })}
         />
       )}
 

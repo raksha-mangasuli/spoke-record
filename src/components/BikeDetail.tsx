@@ -10,6 +10,7 @@ interface Props {
   onAddMaintenance: () => void
   onSelectComponent: (componentId: string) => void
   onSelectRide: (rideId: string) => void
+  onViewAllRides: () => void
   onBack: () => void
 }
 
@@ -21,13 +22,14 @@ export function BikeDetail({
   onAddMaintenance,
   onSelectComponent,
   onSelectRide,
+  onViewAllRides,
   onBack,
 }: Props) {
   const activeComponents = components.filter((c) => c.bikeId === bike.id && c.status === 'active')
-  const recentRides = rides
+  const bikeRides = rides
     .filter((r) => r.bikeId === bike.id)
     .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 5)
+  const recentRides = bikeRides.slice(0, 5)
 
   return (
     <div style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
@@ -101,8 +103,13 @@ export function BikeDetail({
         </div>
 
         <div style={{ padding: '16px 20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>Recent rides</p>
+            {bikeRides.length > 0 && (
+              <span onClick={onViewAllRides} style={{ fontSize: 13, color: 'var(--accent)', cursor: 'pointer' }}>
+                View all
+              </span>
+            )}
           </div>
           {recentRides.length === 0 && (
             <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>No rides logged yet.</p>
