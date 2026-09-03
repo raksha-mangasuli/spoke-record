@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { fileToDownscaledDataUrl } from '../imageUtils'
 
 interface Props {
   onSave: (make: string, model: string, nickname: string, purchaseDate: string, serialNumber: string, photoUrl?: string) => void
@@ -18,9 +19,9 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => setPhotoUrl(reader.result as string)
-    reader.readAsDataURL(file)
+    fileToDownscaledDataUrl(file)
+      .then(setPhotoUrl)
+      .catch(() => {})
   }
 
   return (
