@@ -1,19 +1,24 @@
+import { useState } from 'react'
 import type { Component, MaintenanceLogEntry } from '../types'
 import { COMPONENT_LABELS } from '../types'
 import { formatDate, formatNumber } from '../format'
+import { ConfirmDialog } from './ConfirmDialog'
 import { WearBar, WearLabel } from './Shared'
 
 interface Props {
   component: Component
   maintenance: MaintenanceLogEntry[]
+  bikeTotalKm: number
   onRetire: () => void
   onBack: () => void
 }
 
-export function ComponentDetail({ component, maintenance, onRetire, onBack }: Props) {
+export function ComponentDetail({ component, maintenance, bikeTotalKm, onRetire, onBack }: Props) {
+  const [showRetireConfirm, setShowRetireConfirm] = useState(false)
   const history = maintenance
     .filter((m) => m.componentId === component.id)
     .sort((a, b) => b.date.localeCompare(a.date))
+  const label = COMPONENT_LABELS[component.type].toLowerCase()
 
   return (
     <div style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
@@ -54,11 +59,21 @@ export function ComponentDetail({ component, maintenance, onRetire, onBack }: Pr
         </div>
 
         <div style={{ padding: '12px 16px 20px' }}>
-          <button className="primary" style={{ width: '100%' }} onClick={onRetire}>
+          <button className="primary" style={{ width: '100%' }} onClick={() => setShowRetireConfirm(true)}>
             Retire this component
           </button>
         </div>
       </div>
+
+      {showRetireConfirm && (
+        <ConfirmDialog
+          title={`Retire this ${label}?`}
+          body={`It gets marked as replaced today and kept for history. A fresh ${label} starts tracking from the current odometer (${formatNumber(bikeTotalKm)} km).`}
+          confirmLabel="Retire"
+          onCancel={() => setShowRetireConfirm(false)}
+          onConfirm={onRetire}
+        />
+      )}
     </div>
   )
 }

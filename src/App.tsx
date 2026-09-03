@@ -107,6 +107,7 @@ export default function App() {
         <ComponentDetail
           component={currentComponent}
           maintenance={state.maintenance}
+          bikeTotalKm={currentBike.totalKm}
           onRetire={() => {
             state.retireComponent(currentComponent.id)
             setView({ name: 'bike', bikeId: currentBike.id })
