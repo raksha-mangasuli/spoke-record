@@ -1,5 +1,6 @@
 import type { Component, MaintenanceLogEntry } from '../types'
 import { COMPONENT_LABELS } from '../types'
+import { formatNumber } from '../format'
 import { WearBar, WearLabel } from './Shared'
 
 interface Props {
@@ -29,7 +30,7 @@ export function ComponentDetail({ component, maintenance, onRetire, onBack }: Pr
           <WearBar component={component} />
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
             <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-              {component.accumulatedKm.toLocaleString()} / {component.expectedLifespanKm.toLocaleString()} km
+              {formatNumber(component.accumulatedKm)} / {formatNumber(component.expectedLifespanKm)} km
             </span>
             <WearLabel component={component} />
           </div>
@@ -37,8 +38,8 @@ export function ComponentDetail({ component, maintenance, onRetire, onBack }: Pr
 
         <div style={{ padding: 16, borderBottom: '0.5px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 10 }}>
           <Row label="Install date" value={component.installDate} />
-          <Row label="Install odometer" value={`${component.installOdometerKm} km`} />
-          <Row label="Expected lifespan" value={`${component.expectedLifespanKm} km`} />
+          <Row label="Install odometer" value={`${formatNumber(component.installOdometerKm)} km`} />
+          <Row label="Expected lifespan" value={`${formatNumber(component.expectedLifespanKm)} km`} />
         </div>
 
         <div style={{ padding: 16 }}>

@@ -4,6 +4,7 @@ import { COMPONENT_LABELS } from '../types'
 import { fileToDownscaledBlob } from '../imageUtils'
 import { useImageUrl } from '../useImageUrl'
 import { isStale } from '../wearStatus'
+import { formatNumber } from '../format'
 import { ConfirmDialog } from './ConfirmDialog'
 import { BikeIcon, Chevron, ImageLightbox, WearBar, WearDot } from './Shared'
 
@@ -95,7 +96,7 @@ export function BikeDetail({
             {bike.purchaseDate ? ` · bought ${formatMonthYear(bike.purchaseDate)}` : ''}
           </p>
           <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
-            {bike.totalKm.toLocaleString()} km total
+            {formatNumber(bike.totalKm)} km total
           </p>
         </div>
         <span
@@ -135,7 +136,7 @@ export function BikeDetail({
                 <WearBar component={component} stale={stale} />
               </div>
               <span style={{ fontSize: 12, color: 'var(--text-secondary)', minWidth: 80, textAlign: 'right' }}>
-                {component.accumulatedKm.toLocaleString()}/{component.expectedLifespanKm.toLocaleString()}km
+                {formatNumber(component.accumulatedKm)}/{formatNumber(component.expectedLifespanKm)}km
               </span>
             </div>
           ))}
@@ -219,7 +220,7 @@ export function BikeDetail({
                 )}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{ride.distanceKm} km</span>
+                <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{formatNumber(ride.distanceKm)} km</span>
                 <Chevron size={15} />
               </div>
             </div>

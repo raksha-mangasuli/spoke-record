@@ -1,4 +1,5 @@
 import type { Bike, RideEntry } from '../types'
+import { formatNumber } from '../format'
 import { Chevron } from './Shared'
 
 interface Props {
@@ -25,7 +26,7 @@ export function AllRides({ bike, rides, onSelectRide, onBack }: Props) {
       <div style={{ background: 'var(--header-tint)', borderRadius: '16px 16px 0 0', padding: '16px 20px' }}>
         <p style={{ margin: '0 0 2px', fontSize: 16, fontWeight: 500 }}>All rides</p>
         <p style={{ margin: 0, fontSize: 13, color: 'var(--text-secondary)' }}>
-          {bike.nickname || bike.make} · {bikeRides.length} {bikeRides.length === 1 ? 'ride' : 'rides'} · {bike.totalKm.toLocaleString()} km
+          {bike.nickname || bike.make} · {bikeRides.length} {bikeRides.length === 1 ? 'ride' : 'rides'} · {formatNumber(bike.totalKm)} km
         </p>
       </div>
 
@@ -56,7 +57,7 @@ export function AllRides({ bike, rides, onSelectRide, onBack }: Props) {
               )}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{ride.distanceKm} km</span>
+              <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{formatNumber(ride.distanceKm)} km</span>
               <Chevron size={15} />
             </div>
           </div>

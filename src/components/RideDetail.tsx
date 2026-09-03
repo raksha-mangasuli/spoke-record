@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { RideEntry } from '../types'
+import { formatNumber } from '../format'
 import { ConfirmDialog } from './ConfirmDialog'
 
 interface Props {
@@ -82,7 +83,7 @@ export function RideDetail({ ride, onSave, onDelete, onBack }: Props) {
             Delete ride
           </button>
           <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '8px 0 0', textAlign: 'center', lineHeight: 1.4 }}>
-            Removes this ride and takes its {ride.distanceKm} km back off the components it counted toward.
+            Removes this ride and takes its {formatNumber(ride.distanceKm)} km back off the components it counted toward.
           </p>
         </div>
       </div>
@@ -91,7 +92,7 @@ export function RideDetail({ ride, onSave, onDelete, onBack }: Props) {
         <ConfirmDialog
           destructive
           title="Delete this ride?"
-          body={`The ${ride.distanceKm} km logged on ${formatLongDate(ride.date)} will be removed and taken back off every component it counted toward. This cannot be undone.`}
+          body={`The ${formatNumber(ride.distanceKm)} km logged on ${formatLongDate(ride.date)} will be removed and taken back off every component it counted toward. This cannot be undone.`}
           confirmLabel="Delete"
           onCancel={() => setShowConfirm(false)}
           onConfirm={onDelete}
