@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#2F4A3E; color:#1A1A1A; -webkit-font-smoothing:antialiased; }
+    a { color:#2E3B6E; text-decoration:none; }
+    a:hover { color:#1f2a52; }
+  </style>
+</helmet>
+<div style="min-height:100%; box-sizing:border-box; position:relative; display:flex; align-items:flex-start; justify-content:center; background:#2F4A3E;">
+  <div style="position:absolute; inset:0; background:rgba(0,0,0,0.35);"></div>
+
+  <div style="position:relative; width:100%; max-width:340px; background:#DCE8E3; border-radius:12px; border:0.5px solid #DAD5D8; padding:20px; margin:28px 16px; box-sizing:border-box;">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+      <p style="font-size:16px; font-weight:500; margin:0;">Add bike</p>
+      <span style="cursor:pointer; color:#5F5E5A;">&#10005;</span>
+    </div>
+
+    <label style="font-size:13px; color:#5F5E5A; display:block; margin-bottom:6px;">Photo</label>
+    <label style="display:flex; align-items:center; justify-content:center; height:90px; border-radius:8px; border:0.5px solid #DAD5D8; background:#ffffff; margin-bottom:14px; cursor:pointer; overflow:hidden;">
+      <span style="font-size:13px; color:#5F5E5A;">+ Add photo</span>
+    </label>
+
+    <label style="font-size:13px; color:#5F5E5A; display:block; margin-bottom:6px;">Make</label>
+    <input value="Trek" style="font-family:inherit; font-size:14px; padding:9px 10px; border-radius:8px; border:0.5px solid #DAD5D8; background:#ffffff; width:100%; box-sizing:border-box; margin-bottom:14px;" />
+
+    <label style="font-size:13px; color:#5F5E5A; display:block; margin-bottom:6px;">Model</label>
+    <input value="Domane SL 5" style="font-family:inherit; font-size:14px; padding:9px 10px; border-radius:8px; border:0.5px solid #DAD5D8; background:#ffffff; width:100%; box-sizing:border-box; margin-bottom:14px;" />
+
+    <label style="font-size:13px; color:#5F5E5A; display:block; margin-bottom:6px;">Nickname (optional)</label>
+    <input value="Roadie" style="font-family:inherit; font-size:14px; padding:9px 10px; border-radius:8px; border:0.5px solid #DAD5D8; background:#ffffff; width:100%; box-sizing:border-box; margin-bottom:14px;" />
+
+    <label style="font-size:13px; color:#5F5E5A; display:block; margin-bottom:6px;">Purchase date</label>
+    <input type="date" value="2023-03-14" style="font-family:inherit; font-size:14px; padding:9px 10px; border-radius:8px; border:0.5px solid #DAD5D8; background:#ffffff; width:100%; box-sizing:border-box; margin-bottom:14px;" />
+
+    <label style="font-size:13px; color:#5F5E5A; display:block; margin-bottom:6px;">Serial number (optional)</label>
+    <input value="WTU123K4809" style="font-family:inherit; font-size:14px; padding:9px 10px; border-radius:8px; border:0.5px solid #DAD5D8; background:#ffffff; width:100%; box-sizing:border-box; margin-bottom:14px;" />
+
+    <label style="font-size:13px; color:#5F5E5A; display:block; margin-bottom:6px;">Purchase receipt (optional)</label>
+    <label style="display:block; border-radius:8px; border:0.5px solid #DAD5D8; background:#ffffff; margin-bottom:6px; cursor:pointer; overflow:hidden;">
+      <div style="height:112px; display:flex; align-items:center; justify-content:center; background:#F1ECE2;">
+        <svg width="66" height="86" viewBox="0 0 66 86" fill="none">
+          <rect x="4" y="3" width="58" height="80" rx="2" fill="#FBF7EE" stroke="#CBB08C" stroke-width="1.5"></rect>
+          <path d="M14 16h38M14 24h38M14 32h26M14 44h38M14 52h38M14 60h20" stroke="#C3B291" stroke-width="1.5" stroke-linecap="round"></path>
+          <path d="M40 60h12" stroke="#2E3B6E" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+      </div>
+      <div style="border-top:0.5px solid #DAD5D8; padding:8px 10px; font-size:12px; color:#5F5E5A; display:flex; justify-content:space-between; align-items:center;">
+        <span>receipt-trek-domane.jpg</span>
+        <span style="color:#2E3B6E;">Replace</span>
+      </div>
+    </label>
+    <p style="font-size:12px; color:#5F5E5A; margin:0 0 18px; line-height:1.4;">A photo of your bill. Kept on this device only.</p>
+
+    <div style="display:flex; gap:8px;">
+      <button style="flex:1; font-family:inherit; font-size:14px; font-weight:500; border-radius:8px; padding:10px 14px; cursor:pointer; background:transparent; color:#2E3B6E; border:0.5px solid #2E3B6E;">Cancel</button>
+      <button style="flex:1; font-family:inherit; font-size:14px; font-weight:500; border-radius:8px; padding:10px 14px; cursor:pointer; background:#2E3B6E; color:#ffffff; border:none;">Save bike</button>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

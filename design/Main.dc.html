@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#2F4A3E; color:#1A1A1A; -webkit-font-smoothing:antialiased; }
+    a { color:#2E3B6E; text-decoration:none; }
+    a:hover { color:#1f2a52; }
+  </style>
+</helmet>
+<div style="min-height:100%; box-sizing:border-box; padding:24px 16px; display:flex; justify-content:center; background:#2F4A3E;">
+  <div style="width:100%; max-width:460px; background:#DCE8E3; border-radius:20px; box-shadow:0 6px 28px rgba(0,0,0,0.28); padding:8px 0 32px;">
+    <div style="max-width:420px; margin:0 auto; padding:16px;">
+
+      <div style="color:#5F5E5A; font-size:14px; margin-bottom:12px; cursor:pointer;">&#8592; Back</div>
+
+      <div style="background:#B7CCC5; border-radius:16px 16px 0 0; padding:16px 20px; display:flex; gap:12px; align-items:center;">
+        <div style="width:56px; height:56px; border-radius:8px; background:#2E3B6E; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <circle cx="5.5" cy="17.5" r="3.5" stroke="#ffffff" stroke-width="1.6"></circle>
+            <circle cx="18.5" cy="17.5" r="3.5" stroke="#ffffff" stroke-width="1.6"></circle>
+            <path d="M5.5 17.5L10 8H14M18.5 17.5L14 8M14 8L10.5 12.5H16.5" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M10 8H8" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"></path>
+          </svg>
+        </div>
+        <div>
+          <p style="margin:0 0 2px; font-size:16px; font-weight:500;">Roadie</p>
+          <p style="margin:0; font-size:13px; color:#5F5E5A;">Trek Domane SL 5 &middot; bought Mar 2023</p>
+          <p style="margin:2px 0 0; font-size:13px; color:#5F5E5A;">4,820 km total</p>
+        </div>
+      </div>
+
+      <div style="background:#FAF3E8; border-radius:0 0 16px 16px; padding:0 0 4px;">
+
+        <div style="display:flex; gap:8px; padding:12px 20px; border-bottom:0.5px solid #DAD5D8;">
+          <button style="flex:1; font-family:inherit; font-size:14px; font-weight:500; border-radius:8px; padding:10px 14px; cursor:pointer; background:#2E3B6E; color:#ffffff; border:none;">+ Log a ride</button>
+          <button style="flex:1; font-family:inherit; font-size:14px; font-weight:500; border-radius:8px; padding:10px 14px; cursor:pointer; background:transparent; color:#2E3B6E; border:0.5px solid #2E3B6E;">Add maintenance</button>
+        </div>
+
+        <div style="padding:16px 20px; border-bottom:0.5px solid #DAD5D8;">
+          <p style="font-size:13px; color:#5F5E5A; margin:0 0 10px;">Components</p>
+
+          <div style="display:flex; align-items:center; gap:10px; padding:8px 0; cursor:pointer;">
+            <div style="width:10px; height:10px; border-radius:50%; background:#639922; flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <p style="font-size:14px; margin:0 0 4px;">Chain</p>
+              <div style="height:4px; background:#E4DEE1; border-radius:2px; overflow:hidden;"><div style="height:100%; width:59%; background:#639922;"></div></div>
+            </div>
+            <span style="font-size:12px; color:#5F5E5A; min-width:80px; text-align:right;">1,180/2,000km</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px; padding:8px 0; cursor:pointer;">
+            <div style="width:10px; height:10px; border-radius:50%; background:#BA7517; flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <p style="font-size:14px; margin:0 0 4px;">Tires (front)</p>
+              <div style="height:4px; background:#E4DEE1; border-radius:2px; overflow:hidden;"><div style="height:100%; width:85%; background:#BA7517;"></div></div>
+            </div>
+            <span style="font-size:12px; color:#5F5E5A; min-width:80px; text-align:right;">2,540/3,000km</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px; padding:8px 0; cursor:pointer;">
+            <div style="width:10px; height:10px; border-radius:50%; background:#BA7517; flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <p style="font-size:14px; margin:0 0 4px;">Tires (rear)</p>
+              <div style="height:4px; background:#E4DEE1; border-radius:2px; overflow:hidden;"><div style="height:100%; width:80%; background:#BA7517;"></div></div>
+            </div>
+            <span style="font-size:12px; color:#5F5E5A; min-width:80px; text-align:right;">2,400/3,000km</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px; padding:8px 0; cursor:pointer;">
+            <div style="width:10px; height:10px; border-radius:50%; background:#A32D2D; flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <p style="font-size:14px; margin:0 0 4px;">Brake pads (front)</p>
+              <div style="height:4px; background:#E4DEE1; border-radius:2px; overflow:hidden;"><div style="height:100%; width:100%; background:#A32D2D;"></div></div>
+            </div>
+            <span style="font-size:12px; color:#5F5E5A; min-width:80px; text-align:right;">1,610/1,500km</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:10px; padding:8px 0; cursor:pointer;">
+            <div style="width:10px; height:10px; border-radius:50%; background:#639922; flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <p style="font-size:14px; margin:0 0 4px;">Brake pads (rear)</p>
+              <div style="height:4px; background:#E4DEE1; border-radius:2px; overflow:hidden;"><div style="height:100%; width:60%; background:#639922;"></div></div>
+            </div>
+            <span style="font-size:12px; color:#5F5E5A; min-width:80px; text-align:right;">900/1,500km</span>
+          </div>
+        </div>
+
+        <div style="padding:14px 20px; border-bottom:0.5px solid #DAD5D8; display:flex; align-items:center; gap:12px; cursor:pointer;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M6 3h8l4 4v14H6z" stroke="#2E3B6E" stroke-width="1.6" stroke-linejoin="round"></path>
+            <path d="M14 3v4h4" stroke="#2E3B6E" stroke-width="1.6" stroke-linejoin="round"></path>
+            <path d="M9 12h6M9 16h4" stroke="#2E3B6E" stroke-width="1.6" stroke-linecap="round"></path>
+          </svg>
+          <div style="flex:1;">
+            <p style="font-size:14px; margin:0;">Purchase receipt</p>
+            <p style="font-size:12px; color:#5F5E5A; margin:2px 0 0;">Added 14 Mar 2023</p>
+          </div>
+          <div style="width:44px; height:34px; border-radius:4px; border:0.5px solid #DAD5D8; background:#ffffff; overflow:hidden; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="22" height="28" viewBox="0 0 24 30" fill="none">
+              <rect x="3" y="2" width="18" height="26" fill="#F4EFE6" stroke="#CBB08C" stroke-width="1"></rect>
+              <path d="M6 8h12M6 12h12M6 16h9M6 20h12" stroke="#BCA98C" stroke-width="1" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9A988F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+
+        <div style="padding:16px 20px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+            <p style="font-size:13px; color:#5F5E5A; margin:0;">Recent rides</p>
+            <span style="font-size:13px; color:#2E3B6E; cursor:pointer;">View all &#8594;</span>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:9px 0; cursor:pointer;">
+            <div style="min-width:0;">
+              <p style="font-size:13px; margin:0;">Sep 1</p>
+              <p style="font-size:12px; margin:1px 0 0; color:#5F5E5A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Morning loop</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+              <span style="font-size:13px; color:#5F5E5A;">32 km</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9A988F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:9px 0; border-top:0.5px solid #EEE7DA; cursor:pointer;">
+            <div style="min-width:0;">
+              <p style="font-size:13px; margin:0;">Aug 29</p>
+              <p style="font-size:12px; margin:1px 0 0; color:#5F5E5A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Commute</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+              <span style="font-size:13px; color:#5F5E5A;">18 km</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9A988F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:9px 0; border-top:0.5px solid #EEE7DA; cursor:pointer;">
+            <div style="min-width:0;">
+              <p style="font-size:13px; margin:0;">Aug 27</p>
+              <p style="font-size:12px; margin:1px 0 0; color:#5F5E5A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Trail with S</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+              <span style="font-size:13px; color:#5F5E5A;">44 km</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9A988F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:9px 0; border-top:0.5px solid #EEE7DA; cursor:pointer;">
+            <div style="min-width:0;">
+              <p style="font-size:13px; margin:0;">Aug 24</p>
+              <p style="font-size:12px; margin:1px 0 0; color:#5F5E5A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Recovery spin</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+              <span style="font-size:13px; color:#5F5E5A;">12 km</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9A988F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:9px 0; border-top:0.5px solid #EEE7DA; cursor:pointer;">
+            <div style="min-width:0;">
+              <p style="font-size:13px; margin:0;">Aug 22</p>
+              <p style="font-size:12px; margin:1px 0 0; color:#5F5E5A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Long ride, coast road</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+              <span style="font-size:13px; color:#5F5E5A;">76 km</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#9A988F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
