@@ -85,6 +85,10 @@ export function useAppState() {
     setComponents(updatedComponents)
   }
 
+  function setBikeReceipt(bikeId: string, purchaseReceiptUrl: string | undefined) {
+    setBikes((prev) => prev.map((b) => (b.id === bikeId ? { ...b, purchaseReceiptUrl } : b)))
+  }
+
   function addMaintenanceEntry(input: Omit<MaintenanceLogEntry, 'id'>) {
     const entry: MaintenanceLogEntry = { ...input, id: generateId() }
     setMaintenance((prev) => [...prev, entry])
@@ -114,6 +118,7 @@ export function useAppState() {
     updateRide,
     removeRide,
     addMaintenanceEntry,
+    setBikeReceipt,
     retireComponent,
     updateComponentLifespan,
   }

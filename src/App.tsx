@@ -61,6 +61,7 @@ export default function App() {
           onSelectComponent={(componentId) => setView({ name: 'component', componentId, bikeId: currentBike.id })}
           onSelectRide={(rideId) => setView({ name: 'ride', rideId, bikeId: currentBike.id, from: 'bike' })}
           onViewAllRides={() => setView({ name: 'rides', bikeId: currentBike.id })}
+          onSetReceipt={(url) => state.setBikeReceipt(currentBike.id, url)}
           onBack={() => setView({ name: 'list' })}
         />
       )}
@@ -137,7 +138,7 @@ export default function App() {
       {showAddBike && (
         <AddEditBikeModal
           onCancel={() => setShowAddBike(false)}
-          onSave={(make, model, nickname, purchaseDate, serialNumber, photoUrl) => {
+          onSave={(make, model, nickname, purchaseDate, serialNumber, photoUrl, purchaseReceiptUrl) => {
             const bike = state.addBike({
               make,
               model,
@@ -145,6 +146,7 @@ export default function App() {
               purchaseDate,
               serialNumber: serialNumber || undefined,
               photoUrl,
+              purchaseReceiptUrl,
             })
             setShowAddBike(false)
             setView({ name: 'bike', bikeId: bike.id })
