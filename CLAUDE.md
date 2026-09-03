@@ -27,8 +27,8 @@ interface Bike {
   model: string;
   nickname?: string;
   purchaseDate: string; // ISO date
-  photoUrl?: string;
-  purchaseReceiptUrl?: string; // downscaled image of the purchase bill, added deliberately post-lock
+  photoUrl?: string; // IndexedDB image key (see src/imageStore.ts), not a data URL
+  purchaseReceiptUrl?: string; // IndexedDB image key for the purchase bill (see src/imageStore.ts), added deliberately post-lock
   serialNumber?: string;
   totalKm: number; // stored, updated on ride insert/edit/delete
 }

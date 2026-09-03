@@ -1,5 +1,6 @@
 import type { Bike, Component } from '../types'
 import { BikeIcon } from './Shared'
+import { useImageUrl } from '../useImageUrl'
 import { getWearStatus } from '../wearStatus'
 
 interface Props {
@@ -39,25 +40,7 @@ export function BikeList({ bikes, components, onSelectBike, onAddBike }: Props) 
                 cursor: 'pointer',
               }}
             >
-              <div
-                style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 8,
-                  background: 'var(--accent)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  overflow: 'hidden',
-                }}
-              >
-                {bike.photoUrl ? (
-                  <img src={bike.photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <BikeIcon size={22} />
-                )}
-              </div>
+              <BikeThumb bike={bike} />
               <div style={{ flex: 1 }}>
                 <p style={{ margin: 0, fontSize: 15, fontWeight: 500 }}>{bike.nickname || bike.make}</p>
                 <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
@@ -78,6 +61,31 @@ export function BikeList({ bikes, components, onSelectBike, onAddBike }: Props) 
       <button className="secondary" style={{ width: '100%' }} onClick={onAddBike}>
         + Add bike
       </button>
+    </div>
+  )
+}
+
+function BikeThumb({ bike }: { bike: Bike }) {
+  const photoUrl = useImageUrl(bike.photoUrl)
+  return (
+    <div
+      style={{
+        width: 48,
+        height: 48,
+        borderRadius: 8,
+        background: 'var(--accent)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+        overflow: 'hidden',
+      }}
+    >
+      {photoUrl ? (
+        <img src={photoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+      ) : (
+        <BikeIcon size={22} />
+      )}
     </div>
   )
 }
