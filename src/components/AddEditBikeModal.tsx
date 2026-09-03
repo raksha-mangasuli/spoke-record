@@ -89,7 +89,7 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
         />
 
         <label>
-          Model <span style={{ color: 'var(--required)' }}>*</span>
+          Model/Bike Type <span style={{ color: 'var(--required)' }}>*</span>
         </label>
         <input
           placeholder="Grail"
