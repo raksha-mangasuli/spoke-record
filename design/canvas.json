@@ -1,0 +1,17 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 460, "h": 1000 },
+    { "file": "RideDetail.dc.html", "x": 560, "y": 0, "w": 460, "h": 720 },
+    { "file": "AllRides.dc.html", "x": 1120, "y": 0, "w": 460, "h": 900 },
+    { "file": "AddEditBike.dc.html", "x": 0, "y": 1220, "w": 460, "h": 920 },
+    { "file": "DeleteConfirm.dc.html", "x": 560, "y": 1220, "w": 460, "h": 440 }
+  ],
+  "annotations": [
+    { "id": "note-main", "x": 0, "y": -180, "w": 460, "text": "Bike Detail, updated. New: a Purchase receipt row between components and rides that opens the image fullscreen. Ride rows are now tappable, with a note preview and a chevron, and open Ride Details. View all opens the full history." },
+    { "id": "note-ridedetail", "x": 560, "y": -180, "w": 460, "text": "Ride Details, new screen. Reached by tapping a ride. Date, distance and notes editable inline. Save changes re-applies the distance delta to currently-active components. Delete ride opens the confirm dialog." },
+    { "id": "note-allrides", "x": 1120, "y": -180, "w": 460, "text": "All Rides, new screen. Flat newest-first list, no month grouping. Reached from View all on Bike Detail. Each row opens Ride Details." },
+    { "id": "note-addbike", "x": 0, "y": 1050, "w": 460, "text": "Add / Edit Bike, updated. New Purchase receipt field below Serial number, mirroring the Photo control. Shown filled; empty state reads + Add receipt image like the photo box above it." },
+    { "id": "note-confirm", "x": 560, "y": 1050, "w": 460, "text": "Delete confirm dialog. Styled to match the app modals rather than a browser confirm. Red Delete action, matches the overdue wear colour." }
+  ],
+  "launch": { "view": "canvas" }
+}

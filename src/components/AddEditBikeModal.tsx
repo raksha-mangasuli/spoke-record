@@ -1,7 +1,16 @@
 import { useState } from 'react'
+import { fileToDownscaledDataUrl } from '../imageUtils'
 
 interface Props {
-  onSave: (make: string, model: string, nickname: string, purchaseDate: string, serialNumber: string, photoUrl?: string) => void
+  onSave: (
+    make: string,
+    model: string,
+    nickname: string,
+    purchaseDate: string,
+    serialNumber: string,
+    photoUrl?: string,
+    purchaseReceiptUrl?: string
+  ) => void
   onCancel: () => void
 }
 
@@ -12,15 +21,24 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
   const [purchaseDate, setPurchaseDate] = useState(() => new Date().toISOString().split('T')[0])
   const [serialNumber, setSerialNumber] = useState('')
   const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined)
+  const [purchaseReceiptUrl, setPurchaseReceiptUrl] = useState<string | undefined>(undefined)
 
   const canSave = make.trim().length > 0 && model.trim().length > 0
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => setPhotoUrl(reader.result as string)
-    reader.readAsDataURL(file)
+    fileToDownscaledDataUrl(file)
+      .then(setPhotoUrl)
+      .catch(() => {})
+  }
+
+  function handleReceiptChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    fileToDownscaledDataUrl(file)
+      .then(setPurchaseReceiptUrl)
+      .catch(() => {})
   }
 
   return (
@@ -68,7 +86,38 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
         <input type="date" value={purchaseDate} onChange={(e) => setPurchaseDate(e.target.value)} style={{ marginBottom: 14 }} />
 
         <label>Serial number (optional)</label>
-        <input value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} style={{ marginBottom: 18 }} />
+        <input value={serialNumber} onChange={(e) => setSerialNumber(e.target.value)} style={{ marginBottom: 14 }} />
+
+        <label htmlFor="receipt-input">Purchase receipt (optional)</label>
+        <label
+          htmlFor="receipt-input"
+          style={{
+            display: 'block',
+            borderRadius: 8,
+            border: '0.5px solid var(--border)',
+            background: 'white',
+            marginBottom: 6,
+            cursor: 'pointer',
+            overflow: 'hidden',
+          }}
+        >
+          {purchaseReceiptUrl ? (
+            <>
+              <img src={purchaseReceiptUrl} alt="" style={{ display: 'block', width: '100%', maxHeight: 160, objectFit: 'contain', background: '#f1ece2' }} />
+              <span style={{ display: 'block', borderTop: '0.5px solid var(--border)', padding: '7px 10px', fontSize: 12, color: 'var(--accent)' }}>
+                Replace
+              </span>
+            </>
+          ) : (
+            <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 90, fontSize: 13, color: 'var(--text-secondary)' }}>
+              + Add receipt image
+            </span>
+          )}
+        </label>
+        <input id="receipt-input" type="file" accept="image/*" onChange={handleReceiptChange} style={{ display: 'none' }} />
+        <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '0 0 18px', lineHeight: 1.4 }}>
+          A photo of your bill. Kept on this device only.
+        </p>
 
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="secondary" style={{ flex: 1 }} onClick={onCancel}>
@@ -78,7 +127,7 @@ export function AddEditBikeModal({ onSave, onCancel }: Props) {
             className="primary"
             style={{ flex: 1 }}
             disabled={!canSave}
-            onClick={() => onSave(make, model, nickname, purchaseDate, serialNumber, photoUrl)}
+            onClick={() => onSave(make, model, nickname, purchaseDate, serialNumber, photoUrl, purchaseReceiptUrl)}
           >
             Save bike
           </button>

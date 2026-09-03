@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#2F4A3E; color:#1A1A1A; -webkit-font-smoothing:antialiased; }
+    a { color:#2E3B6E; text-decoration:none; }
+    a:hover { color:#1f2a52; }
+  </style>
+</helmet>
+<div style="min-height:100%; box-sizing:border-box; position:relative; display:flex; align-items:center; justify-content:center; background:#2F4A3E;">
+  <div style="position:absolute; inset:0; background:rgba(0,0,0,0.35);"></div>
+
+  <div style="position:relative; width:100%; max-width:300px; background:#DCE8E3; border-radius:12px; border:0.5px solid #DAD5D8; padding:20px; margin:16px; box-sizing:border-box;">
+    <p style="font-size:16px; font-weight:500; margin:0 0 8px;">Delete this ride?</p>
+    <p style="font-size:13px; color:#5F5E5A; margin:0 0 18px; line-height:1.45;">The 32 km logged on 1 Sep will be removed and taken back off every component it counted toward. This cannot be undone.</p>
+    <div style="display:flex; gap:8px;">
+      <button style="flex:1; font-family:inherit; font-size:14px; font-weight:500; border-radius:8px; padding:10px 14px; cursor:pointer; background:transparent; color:#2E3B6E; border:0.5px solid #2E3B6E;">Cancel</button>
+      <button style="flex:1; font-family:inherit; font-size:14px; font-weight:500; border-radius:8px; padding:10px 14px; cursor:pointer; background:#A32D2D; color:#ffffff; border:none;">Delete</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,6 +1,8 @@
+import { useRef, useState } from 'react'
 import type { Bike, Component, RideEntry } from '../types'
 import { COMPONENT_LABELS } from '../types'
-import { BikeIcon, WearBar, WearDot } from './Shared'
+import { fileToDownscaledDataUrl } from '../imageUtils'
+import { BikeIcon, Chevron, ImageLightbox, WearBar, WearDot } from './Shared'
 
 interface Props {
   bike: Bike
@@ -9,6 +11,9 @@ interface Props {
   onLogRide: () => void
   onAddMaintenance: () => void
   onSelectComponent: (componentId: string) => void
+  onSelectRide: (rideId: string) => void
+  onViewAllRides: () => void
+  onSetReceipt: (url: string | undefined) => void
   onBack: () => void
 }
 
@@ -19,13 +24,26 @@ export function BikeDetail({
   onLogRide,
   onAddMaintenance,
   onSelectComponent,
+  onSelectRide,
+  onViewAllRides,
+  onSetReceipt,
   onBack,
 }: Props) {
+  const receiptInputRef = useRef<HTMLInputElement>(null)
+  const [showReceipt, setShowReceipt] = useState(false)
+
+  function handleReceiptChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    fileToDownscaledDataUrl(file).then(onSetReceipt).catch(() => {})
+  }
+
   const activeComponents = components.filter((c) => c.bikeId === bike.id && c.status === 'active')
-  const recentRides = rides
+  const bikeRides = rides
     .filter((r) => r.bikeId === bike.id)
     .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 5)
+  const recentRides = bikeRides.slice(0, 5)
 
   return (
     <div style={{ maxWidth: 420, margin: '0 auto', padding: 16 }}>
@@ -98,21 +116,93 @@ export function BikeDetail({
           ))}
         </div>
 
+        <div style={{ padding: '14px 20px', borderBottom: '0.5px solid var(--border)' }}>
+          <input
+            ref={receiptInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleReceiptChange}
+            style={{ display: 'none' }}
+          />
+          {bike.purchaseReceiptUrl ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div
+                onClick={() => setShowReceipt(true)}
+                style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0, cursor: 'pointer' }}
+              >
+                <div style={{ width: 44, height: 34, borderRadius: 4, border: '0.5px solid var(--border)', background: '#fff', overflow: 'hidden', flexShrink: 0 }}>
+                  <img src={bike.purchaseReceiptUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <p style={{ fontSize: 14, margin: 0, flex: 1 }}>Purchase receipt</p>
+                <Chevron size={16} />
+              </div>
+              <span
+                onClick={() => receiptInputRef.current?.click()}
+                style={{ fontSize: 13, color: 'var(--accent)', cursor: 'pointer', flexShrink: 0 }}
+              >
+                Replace
+              </span>
+            </div>
+          ) : (
+            <div
+              onClick={() => receiptInputRef.current?.click()}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+            >
+              <div style={{ width: 44, height: 34, borderRadius: 4, border: '0.5px dashed var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--text-secondary)', fontSize: 18, lineHeight: 1 }}>
+                +
+              </div>
+              <p style={{ fontSize: 14, margin: 0, flex: 1 }}>Add purchase receipt</p>
+              <Chevron size={16} />
+            </div>
+          )}
+        </div>
+
         <div style={{ padding: '16px 20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
             <p style={{ fontSize: 13, color: 'var(--text-secondary)', margin: 0 }}>Recent rides</p>
+            {bikeRides.length > 0 && (
+              <span onClick={onViewAllRides} style={{ fontSize: 13, color: 'var(--accent)', cursor: 'pointer' }}>
+                View all
+              </span>
+            )}
           </div>
           {recentRides.length === 0 && (
             <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>No rides logged yet.</p>
           )}
-          {recentRides.map((ride) => (
-            <div key={ride.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '5px 0', color: 'var(--text-secondary)' }}>
-              <span>{formatShortDate(ride.date)}</span>
-              <span>{ride.distanceKm} km</span>
+          {recentRides.map((ride, i) => (
+            <div
+              key={ride.id}
+              onClick={() => onSelectRide(ride.id)}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 10,
+                padding: '9px 0',
+                borderTop: i === 0 ? undefined : '0.5px solid var(--border)',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
+                <p style={{ fontSize: 13, margin: 0 }}>{formatShortDate(ride.date)}</p>
+                {ride.notes && (
+                  <p style={{ fontSize: 12, margin: '1px 0 0', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {ride.notes}
+                  </p>
+                )}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{ride.distanceKm} km</span>
+                <Chevron size={15} />
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      {showReceipt && bike.purchaseReceiptUrl && (
+        <ImageLightbox src={bike.purchaseReceiptUrl} onClose={() => setShowReceipt(false)} />
+      )}
     </div>
   )
 }

@@ -30,6 +30,35 @@ const statusLabel: Record<string, string> = {
   overdue: 'Overdue',
 }
 
+export function ImageLightbox({ src, onClose }: { src: string; onClose: () => void }) {
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(0,0,0,0.8)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+        zIndex: 100,
+        cursor: 'zoom-out',
+      }}
+    >
+      <img src={src} alt="Purchase receipt" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: 4 }} />
+    </div>
+  )
+}
+
+export function Chevron({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0, opacity: 0.5 }}>
+      <path d="M9 6l6 6-6 6" stroke="var(--text-secondary)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export function WearBar({ component }: { component: Component }) {
   const status = getWearStatus(component)
   const ratio = getWearRatio(component)

@@ -51,17 +51,26 @@ export function useAppState() {
     setComponents(updatedComponents)
   }
 
-  function updateRideDistance(rideId: string, newDistanceKm: number) {
+  function updateRide(
+    rideId: string,
+    patch: { date?: string; distanceKm?: number; notes?: string }
+  ) {
     const ride = rides.find((r) => r.id === rideId)
     const bike = bikes.find((b) => b.id === ride?.bikeId)
     if (!ride || !bike) return
+    const newDistanceKm = patch.distanceKm ?? ride.distanceKm
     const { updatedRide, updatedBike, updatedComponents } = editRide(
       ride,
       newDistanceKm,
       bike,
       components
     )
-    setRides((prev) => prev.map((r) => (r.id === rideId ? updatedRide : r)))
+    const finalRide: RideEntry = {
+      ...updatedRide,
+      date: patch.date ?? ride.date,
+      notes: patch.notes !== undefined ? patch.notes || undefined : ride.notes,
+    }
+    setRides((prev) => prev.map((r) => (r.id === rideId ? finalRide : r)))
     setBikes((prev) => prev.map((b) => (b.id === bike.id ? updatedBike : b)))
     setComponents(updatedComponents)
   }
@@ -74,6 +83,10 @@ export function useAppState() {
     setRides((prev) => prev.filter((r) => r.id !== rideId))
     setBikes((prev) => prev.map((b) => (b.id === bike.id ? updatedBike : b)))
     setComponents(updatedComponents)
+  }
+
+  function setBikeReceipt(bikeId: string, purchaseReceiptUrl: string | undefined) {
+    setBikes((prev) => prev.map((b) => (b.id === bikeId ? { ...b, purchaseReceiptUrl } : b)))
   }
 
   function addMaintenanceEntry(input: Omit<MaintenanceLogEntry, 'id'>) {
@@ -102,9 +115,10 @@ export function useAppState() {
     maintenance,
     addBike,
     addRide,
-    updateRideDistance,
+    updateRide,
     removeRide,
     addMaintenanceEntry,
+    setBikeReceipt,
     retireComponent,
     updateComponentLifespan,
   }
