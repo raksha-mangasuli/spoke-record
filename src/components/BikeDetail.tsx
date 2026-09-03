@@ -135,7 +135,7 @@ export function BikeDetail({
                 <WearBar component={component} stale={stale} />
               </div>
               <span style={{ fontSize: 12, color: 'var(--text-secondary)', minWidth: 80, textAlign: 'right' }}>
-                {component.accumulatedKm}/{component.expectedLifespanKm}km
+                {component.accumulatedKm.toLocaleString()}/{component.expectedLifespanKm.toLocaleString()}km
               </span>
             </div>
           ))}
